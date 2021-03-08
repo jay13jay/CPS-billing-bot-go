@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/gen2brain/dlgs"
 )
 
 func main() {
@@ -17,8 +19,13 @@ func main() {
 	powerEntities := "urn:opower:customer:uuid:" + GUID
 	timeFrame := "quarter_hour"
 
-	fmt.Println("Please enter your GUID:")
-	fmt.Scanf("%s", &GUID) // get GUID from user input
+	// fmt.Println("Please enter your GUID:")
+	// fmt.Scanf("%s", &GUID) // get GUID from user input
+	GUID, enteredText, err := dlgs.Entry("GUID", "Enter your GUID:", "GUIDNOTENTERED")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(enteredText)
 
 	fmt.Printf("variable GUID\t%s\n\n", GUID)
 

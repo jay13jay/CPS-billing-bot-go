@@ -20,3 +20,10 @@
 - If you need direct feedback, you can email me at: jhaxllc@gmail.com
   - Please note I do not check this email everyday but I will try to respond as quickly as possible
 
+- A major note: Windows WILL warn you that you are running the file, it will do this anytime you run an executable you downloaded you will see an error such as the one in the image below.
+  - To run, first click more info
+    ![Alt text](images/Windows_AV_error.png "a title")
+  - After more info, you should have two boxes, "Run Anyway" or "Don't Run". To run the file, click "Run Anyway"
+    ![Alt text](images/Windows_AV_error_2.png "a title")
+  - The next time you run the file, you should not get any warnings, however if you download any updates it's possible this may happen again
+  - Yes I plan on fixing this issue eventually but as it stands this is a one off script, not for mass public distribution
