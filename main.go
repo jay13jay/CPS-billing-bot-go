@@ -49,12 +49,17 @@ func main() {
 	req.Header.Set("Referer", "https://secure.cpsenergy.com/")
 	req.Header.Set("Cookie", "cookie-check=true; JSESSIONID=GUID; __direct-domain-access-fix=applied")
 
-	// resp, err := http.DefaultClient.Do(req)
-	// if err != nil {
-	// 	// handle err
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Printf("An error occured, see message below:\n%s\n", err)
+	}
+	// if resp != 200 {
+	// 	fmt.Printf("Expecting a 200 response, received %s instead\n", resp)
+	// 	fmt.Println("Please ensure you entered the correct GUID")
 	// }
-	// defer resp.Body.Close()
-	fmt.Printf("Printing headers:\n %s\n\n", req.Header)
+	fmt.Printf("Expecting a 200 response, received %s instead\n", resp.StatusCode)
+	defer resp.Body.Close()
+	// fmt.Printf("Printing headers:\n %s\n\n", req.Header)
 	fmt.Printf("Full URL:\n %s\n\n\n", fullURL)
 	fmt.Println("main function completed")
 }
