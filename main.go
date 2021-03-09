@@ -16,24 +16,25 @@ func main() {
 	startDate := "2021-01-29"
 	endDate := "2021-02-28"
 	userAgent := "Dont taze me bro, just checking my usage"
-	powerEntities := "urn:opower:customer:uuid:" + GUID
 	timeFrame := "quarter_hour"
+	GUID, enteredText, err := dlgs.Entry("GUID", "Enter your GUID:", "GUID")
+	sessionID, _, err := dlgs.Entry("Jsession", "Enter your Jsession ID:", "sessionID")
+	powerEntities := "urn:opower:customer:uuid:" + GUID
+	myCookie := "cookie-check=true; JSESSIONID=" + sessionID + "; __direct-domain-access-fix=applied"
 
-	// fmt.Println("Please enter your GUID:")
-	// fmt.Scanf("%s", &GUID) // get GUID from user input
-	GUID, enteredText, err := dlgs.Entry("GUID", "Enter your GUID:", "GUIDNOTENTERED")
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(enteredText)
 
-	fmt.Printf("variable GUID\t%s\n\n", GUID)
+	fmt.Printf("GUID\t%s\n", GUID)
+	fmt.Printf("Session ID:\t%s\n\n", sessionID)
 
 	fullURL := cpsEndpoint + GUID + "/reads?startDate=" + startDate + "&endDate=" + endDate + "&aggregateType=" + timeFrame + "&includeEnhancedBilling=false&includeMultiRegisterData=false"
 
 	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
-		// handle err
+		fmt.Printf("An error as occured. Please see message below for more info\n%s\n\n", err)
 	}
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("Dnt", "1")
@@ -47,19 +48,20 @@ func main() {
 	req.Header.Set("Sec-Fetch-Mode", "cors")
 	req.Header.Set("Sec-Fetch-Dest", "empty")
 	req.Header.Set("Referer", "https://secure.cpsenergy.com/")
-	req.Header.Set("Cookie", "cookie-check=true; JSESSIONID=GUID; __direct-domain-access-fix=applied")
+	req.Header.Set("Cookie", myCookie)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Printf("An error occured, see message below:\n%s\n", err)
 	}
-	// if resp != 200 {
-	// 	fmt.Printf("Expecting a 200 response, received %s instead\n", resp)
-	// 	fmt.Println("Please ensure you entered the correct GUID")
-	// }
-	fmt.Printf("Expecting a 200 response, received %s instead\n", resp.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		fmt.Printf("Expecting a 200 response, received %s instead\n", resp)
+		fmt.Println("Please ensure you entered the correct GUID")
+	}
+
 	defer resp.Body.Close()
 	// fmt.Printf("Printing headers:\n %s\n\n", req.Header)
 	fmt.Printf("Full URL:\n %s\n\n\n", fullURL)
+	fmt.Printf("Full Headers:\n%s\n\n", req.Header)
 	fmt.Println("main function completed")
 }
